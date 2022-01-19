@@ -1,0 +1,22 @@
+[name]
+model_name=MFD
+
+[train-configure]
+epochs=300
+steps=100,250
+batch_size=256
+subdivisions=1
+learning_rate=0.001
+
+[model-configure]
+pre_weights=''
+classes=3
+width=352
+height=352
+anchor_num=3
+anchors=5.33,7.45, 9.10,13.58, 16.37,23.60, 31.33,40.89, 63.60,77.61, 152.21,161.75
+
+[data-configure]
+train=D:/face_dataset/wider_face_add_lm_10_10/train.txt
+val=D:/face_dataset/wider_face_add_lm_10_10/test.txt
+names=./data/MFD.names
