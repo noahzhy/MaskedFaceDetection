@@ -143,30 +143,35 @@ def divide_dataset(root_path, train_target_dir, val_target_dir):
 
     for idx, i in enumerate(train_set):
         base_name = os.path.basename(i)
+        ex_basename = base_name.split('.')[0]
         print(i)
         # if idx > 100: break
         copyfile(i, os.path.join(train_target_dir, base_name))
+        copyfile(i.replace('.jpg', '.xml'), os.path.join(train_target_dir, "{}.xml".format(ex_basename)))
 
     for idx, i in enumerate(val_set):
         base_name = os.path.basename(i)
+        ex_basename = base_name.split('.')[0]
         print(i)
         # if idx > 100: break
         copyfile(i, os.path.join(val_target_dir, base_name))
+        copyfile(i.replace('.jpg', '.xml'), os.path.join(val_target_dir, "{}.xml".format(ex_basename)))
 
 
 if __name__ == '__main__':
-    # xml_dir = r'C:\Users\go\Desktop\MAFA\FMLD_annotations\train'
-    # jpg_dir = r'C:\dataset\license_plate\license_plate_detection\JPEGImages'
-    # change_label_name(xml_dir, 'unmasked_face', 'face')
+    # xml_dir = r'D:\FMLD_annotations\test'
+    # change_label_name(xml_dir, 'masked_face', 'masked')
+    # change_label_name(xml_dir, 'unmasked_face', 'unmasked')
+    # change_label_name(xml_dir, 'incorrectly_masked_face', 'incorrectly')
 
     # root_dir = r'C:\dataset\license_plate\license_plate_detection'
     # rename_voc_dataset(root_dir, jpg_dir, xml_dir)
     # # check_wh_ratio(xml_dir)
     # remove_small_object(xml_dir, min_height=6, min_width=24)
 
-    original_path = r"D:\face_dataset\wider_face_add_lm_10_10\wflm10"
-    train_target_dir = r"D:\face_dataset\wider_face_add_lm_10_10\train"
-    val_target_dir = r"D:\face_dataset\wider_face_add_lm_10_10\val"
+    original_path = r"D:\medical-masks-dataset_clean\images"
+    train_target_dir = r"D:\medical-masks-dataset_clean\train"
+    val_target_dir = r"D:\medical-masks-dataset_clean\test"
 
     Path(train_target_dir).mkdir(exist_ok=True, parents=True)
     Path(val_target_dir).mkdir(exist_ok=True, parents=True)

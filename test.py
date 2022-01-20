@@ -14,11 +14,17 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--data', type=str, default='data/MFD.data',
                         help='Specify training profile *.data')
-    parser.add_argument('--weights', type=str, default='weights/MFD-140-epoch-0.507883ap-model.pth',
+    parser.add_argument('--weights', type=str, default='weights\MFD-70-epoch-0.550508ap-model.pth',
                         help='The path of the .pth model to be transformed')
     parser.add_argument('--img', type=str,
                         default=r'test/test00.jpg',
                         help='The path of test image')
+
+    color_list = {
+        0: (0, 255, 0),
+        1: (0, 0, 255),
+        2: (0, 165, 255)
+    }
 
     opt = parser.parse_args()
     cfg = utils.utils.load_datafile(opt.data)
@@ -50,9 +56,8 @@ if __name__ == '__main__':
     print("forward time: %fms" % time)
 
     output = utils.utils.handel_preds(preds, cfg, device)
-    # print(output.shape, preds, cfg)
     output_boxes = utils.utils.non_max_suppression(
-        output, conf_thres=0.3, iou_thres=0.45)
+        output, conf_thres=0.2, iou_thres=0.0)
     print(output_boxes)
 
     LABEL_NAMES = []
@@ -68,13 +73,13 @@ if __name__ == '__main__':
 
         obj_score = box[4]
         category = LABEL_NAMES[int(box[5])]
+        color = color_list[int(box[5])]
 
         x1, y1 = int(box[0] * scale_w), int(box[1] * scale_h)
         x2, y2 = int(box[2] * scale_w), int(box[3] * scale_h)
 
-        cv2.rectangle(ori_img, (x1, y1), (x2, y2), (0, 255, 0), 2)
-        cv2.putText(ori_img, '%.2f' % obj_score,
-                    (x1, y1 - 5), 0, 0.7, (0, 255, 0), 2)
-        cv2.putText(ori_img, category, (x1, y1 - 25), 0, 0.7, (0, 255, 0), 2)
+        cv2.rectangle(ori_img, (x1, y1), (x2, y2), color, 2)
+        cv2.putText(ori_img, '%.2f' % obj_score, (x1, y1 - 5), 0, 0.7, color, 2)
+        cv2.putText(ori_img, category, (x1, y1 - 25), 0, 0.7, color, 2)
 
     cv2.imwrite("test/{}_result.jpg".format(os.path.basename(opt.img).split('.')[0]), ori_img)

@@ -12,16 +12,15 @@ import model.detector
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--data', type=str, default='data/LPD.data',
+    parser.add_argument('--data', type=str, default='data/MFD.data',
                         help='Specify training profile *.data')
-    parser.add_argument('--weights', type=str, default='weights/LPD-230-epoch-0.820026ap-model_480x640.pth',
+    parser.add_argument('--weights', type=str, default='weights/MFD-70-epoch-0.550508ap-model.pth',
                         help='The path of the .pth model to be transformed')
     opt = parser.parse_args()
     cfg = utils.utils.load_datafile(opt.data)
 
-    assert os.path.exists(opt.weights), "请指定正确的模型路径"
+    assert os.path.exists(opt.weights), "model is not exist"
 
-    print("评估配置:")
     print("model_name:%s"%cfg["model_name"])
     print("width:%d height:%d"%(cfg["width"], cfg["height"]))
     print("val:%s"%(cfg["val"]))
@@ -32,15 +31,16 @@ if __name__ == '__main__':
     batch_size = int(cfg["batch_size"] / cfg["subdivisions"])
     nw = min([os.cpu_count(), batch_size if batch_size > 1 else 0, 8])
 
-    val_dataloader = torch.utils.data.DataLoader(val_dataset,
-                                                 batch_size=batch_size,
-                                                 shuffle=False,
-                                                 collate_fn=utils.datasets.collate_fn,
-                                                 num_workers=nw,
-                                                 pin_memory=True,
-                                                 drop_last=False,
-                                                 persistent_workers=True
-                                                 )
+    val_dataloader = torch.utils.data.DataLoader(
+        val_dataset,
+        batch_size=batch_size,
+        shuffle=False,
+        collate_fn=utils.datasets.collate_fn,
+        num_workers=nw,
+        pin_memory=True,
+        drop_last=False,
+        persistent_workers=True
+    )
     
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 

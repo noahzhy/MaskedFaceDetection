@@ -11,10 +11,8 @@ from PIL import Image
 
 
 dirs = [
-    r'D:\face_dataset\wider_face_add_lm_10_10/train',
-    r'D:\face_dataset\wider_face_add_lm_10_10/val',
-    # r'C:/Users/go/Desktop/MAFA/FMLD_annotations/train',
-    # r'C:/Users/go/Desktop/MAFA/FMLD_annotations/test'
+    r'D:\FMLD_annotations/train',
+    r'D:\FMLD_annotations/test',
 ]
 classes = list([i.replace('\n', '') for i in open('data/MFD.names', 'r')])
 # print(classes)
@@ -85,9 +83,15 @@ def convert_annotation(dir_path, output_path, image_path):
     out_file = open(output_path + '/' + basename_no_ext + '.txt', 'w')
     tree = ET.parse(in_file)
     root = tree.getroot()
-    size = root.find('size')
-    w = int(size.find('width').text)
-    h = int(size.find('height').text)
+    try:
+        size = root.find('size')
+        w = int(size.find('width').text)
+        h = int(size.find('height').text)
+        assert w != 0 and h != 0
+    except:
+        im = Image.open(image_path)
+        w, h = im.size
+        print(w, h)
 
     for obj in root.iter('object'):
         # difficult = obj.find('difficult').text
@@ -95,13 +99,12 @@ def convert_annotation(dir_path, output_path, image_path):
         # if cls not in classes or int(difficult)==1:
         #     continue
         if cls not in classes:
-            continue
+            break
         cls_id = classes.index(cls)
         xmlbox = obj.find('bndbox')
         b = (float(xmlbox.find('xmin').text), float(xmlbox.find('xmax').text), float(xmlbox.find('ymin').text), float(xmlbox.find('ymax').text))
-        if b == 0 or w==0:
-            im = Image.open(image_path)
-            w, h = im.size
+        if b == 0:
+            continue
         bb = convert((w,h), b)
         out_file.write(str(cls_id) + " " + " ".join([str(a) for a in bb]) + '\n')
 

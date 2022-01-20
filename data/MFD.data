@@ -4,19 +4,19 @@ model_name=MFD
 [train-configure]
 epochs=300
 steps=100,250
-batch_size=256
+batch_size=128
 subdivisions=1
-learning_rate=0.001
+learning_rate=0.0003
 
 [model-configure]
-pre_weights=''
+pre_weights=weights/MFD-70-epoch-0.550508ap-model.pth
 classes=3
 width=352
 height=352
 anchor_num=3
-anchors=5.33,7.45, 9.10,13.58, 16.37,23.60, 31.33,40.89, 63.60,77.61, 152.21,161.75
+anchors=18.53,29.82, 36.70,52.53, 68.22,83.19, 109.20,126.06, 164.02,152.66, 213.14,217.87
 
 [data-configure]
-train=D:/face_dataset/wider_face_add_lm_10_10/train.txt
-val=D:/face_dataset/wider_face_add_lm_10_10/test.txt
+train=D:\FMLD_annotations/train.txt
+val=D:\FMLD_annotations/test.txt
 names=./data/MFD.names
