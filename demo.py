@@ -16,7 +16,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--data', type=str, default='data/MFD.data',
                         help='Specify training profile *.data')
-    parser.add_argument('--weights', type=str, default='weights\MFD-70-epoch-0.550508ap-model.pth',
+    parser.add_argument('--weights', type=str, default='weights\MFD-10-epoch-0.553499ap-model.pth',
                         help='The path of the .pth model to be transformed')
 
     color_list = {

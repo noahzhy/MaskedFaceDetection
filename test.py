@@ -17,7 +17,7 @@ if __name__ == '__main__':
     parser.add_argument('--weights', type=str, default='weights\MFD-70-epoch-0.550508ap-model.pth',
                         help='The path of the .pth model to be transformed')
     parser.add_argument('--img', type=str,
-                        default=r'test/test00.jpg',
+                        default=r'test/test_00003519.jpg',
                         help='The path of test image')
 
     color_list = {
@@ -57,7 +57,7 @@ if __name__ == '__main__':
 
     output = utils.utils.handel_preds(preds, cfg, device)
     output_boxes = utils.utils.non_max_suppression(
-        output, conf_thres=0.2, iou_thres=0.0)
+        output, conf_thres=0.3, iou_thres=0.0)
     print(output_boxes)
 
     LABEL_NAMES = []
